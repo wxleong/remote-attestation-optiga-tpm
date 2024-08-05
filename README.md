@@ -1,19 +1,9 @@
 # Introduction
-Remote attestation is a mechanism to enable a remote system (server) to determine the integrity of a platform of another system (Raspberry Pi®). In a Linux-based system, a security feature known as the Integrity Measurement Architecture (IMA) can be used to capture platform measurements. Together with TPM a hardware-based security and its set of attestation features, it can be used to perform authentication and to protect the IMA measurement.
+
+Remote attestation is a mechanism that allows a remote system (server) to verify the integrity of another system's platform (e.g., a Raspberry Pi®). In a Linux-based system, the Integrity Measurement Architecture (IMA) can be used to capture platform measurements. Combined with a Trusted Platform Module (TPM), which provides hardware-based security and attestation features, this setup can authenticate and protect the IMA measurements, ensuring the integrity of the platform.
 
 # Prerequisites
 
-Hardware prerequisites:
-- [Raspberry Pi® 4](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/) or [Raspberry Pi® 3](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
-- Use either of the following TPM2.0 boards:
-  - [IRIDIUM9670 TPM2.0](https://www.infineon.com/cms/en/product/evaluation-boards/iridium9670-tpm2.0-linux/)\
-    <img src="https://github.com/Infineon/remote-attestation-optiga-tpm/raw/master/media/IRIDIUM9670-TPM2.png" width="30%">
-  - [OPTIGA™ TPM SLB 9672 RPI evaluation board](https://www.infineon.com/cms/en/product/evaluation-boards/optiga-tpm-9672-rpi-eval/)\
-    <img src="https://github.com/Infineon/remote-attestation-optiga-tpm/raw/master/media/SLB9672-EVA-BOARD.png" width="40%">
-
-# Getting Started
-
-In this repository, you will find attestation server and device (Raspberry Pi 3/4) reference implementations. For detailed setup and information, please find the Application Note at [link](https://github.com/Infineon/remote-attestation-optiga-tpm/raw/master/documents/tpm-appnote-ra.pdf).
-
 # License
+
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
