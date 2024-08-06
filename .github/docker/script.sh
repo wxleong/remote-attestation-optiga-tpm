@@ -72,7 +72,7 @@ awk -v section_prefix=$SECTION_PREFIX -v output_file=$TEMP_FILE_2 "/# <!--tests:
 cat > ${SCRIPT_NAME} << EOF
 #!/usr/bin/env bash
 
-set -exufo pipefail
+set -exfo pipefail
 
 # This is necessary when the shell is in non-interactive mode
 shopt -s expand_aliases
