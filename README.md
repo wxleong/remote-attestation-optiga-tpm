@@ -39,17 +39,7 @@ Install the dependencies:
 $ sudo apt-get update
 $ sudo apt-get install -y gawk wget git-core diffstat unzip texinfo gcc-multilib \
      build-essential chrpath socat libsdl1.2-dev xterm zstd liblz4-tool qemu-system \
-     locales cpio file
-```
-
-Switch to a non-root user if a Docker container environment is used:
-```all
-$ sudo apt-get install sudo
-
-$ useradd -ms /bin/bash user
-$ passwd -d user
-$ adduser user sudo
-$ su user
+     cpio file
 ```
 
 Fetch the poky repository:
@@ -69,7 +59,8 @@ Set up the build environment:
 $ source oe-init-build-env
 ```
 
-Build the `core-image-full-cmdline` [image](https://docs.yoctoproject.org/ref-manual/images.html#images):
+Build the `core-image-full-cmdline`:
+> core-image-full-cmdline: A console-only image with more full-featured Linux system functionality installed. [More information here](https://docs.yoctoproject.org/ref-manual/images.html#images).
 ```all
 $ bitbake -k core-image-full-cmdline
 ```

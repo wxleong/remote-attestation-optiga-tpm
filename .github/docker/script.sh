@@ -11,6 +11,20 @@ TEMP_FILE_2=.${SCRIPT_NAME}.concat
 
 cd $WORKSPACE_DIR
 
+###
+# Pre-initialize based on the distro
+###
+
+apt update
+
+if [ "$DOCKER_IMAGE" = "ubuntu:22.04" ]; then
+    apt install -y gawk
+fi
+
+###
+# Parse the README.md
+###
+
 # Mark generic commands
 cat README.md | sed '/^ *```all.*$/,/^ *```$/ { s/^ *\$/_M_/; { :loop; /^_M_.*[^\\]\\$/ { n; s/^/_M_/; t loop } } }' > ${TEMP_FILE_1}
 # Mark commands that depend on the distro
@@ -23,12 +37,6 @@ sed -i '/^_M_/! s/^/# /' ${TEMP_FILE_1}
 sed -i '/^_M_/ s/<--.*//' ${TEMP_FILE_1}
 # Remove the marker
 sed -i 's/^_M_ //' ${TEMP_FILE_1}
-
-# Debian
-if [ "$DOCKER_IMAGE" = "ubuntu:22.04" ]; then
-    apt update
-    apt install -y gawk
-fi
 
 # Divide the file into predefined sections
 awk -v section_prefix=$SECTION_PREFIX "/# <!--section:/,/# <!--section-end-->/"'{
@@ -68,7 +76,10 @@ awk -v section_prefix=$SECTION_PREFIX -v output_file=$TEMP_FILE_2 "/# <!--tests:
     }
 }' ${TEMP_FILE_1}
 
+###
 # Initialize an executable script
+###
+
 cat > ${SCRIPT_NAME} << EOF
 #!/usr/bin/env bash
 
@@ -77,7 +88,7 @@ set -exfo pipefail
 # This is necessary when the shell is in non-interactive mode
 shopt -s expand_aliases
 
-alias sudo=""
+#alias sudo=""
 
 EOF
 
@@ -85,6 +96,27 @@ cat ${TEMP_FILE_2} >> ${SCRIPT_NAME}
 echo -e '\nexit 0' >> ${SCRIPT_NAME}
 
 chmod a+x ${SCRIPT_NAME}
-./${SCRIPT_NAME}
+
+###
+# Set the locale settings
+###
+
+export LANGUAGE="en_US:en"
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
+apt install locales
+locale-gen en_US.UTF-8
+
+###
+# Execute as an non-root user
+###
+
+apt install sudo
+
+useradd -ms /bin/bash user
+passwd -d user
+adduser user sudo
+exec su user ./${SCRIPT_NAME}
 
 exit 0
