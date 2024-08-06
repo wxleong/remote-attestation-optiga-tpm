@@ -84,6 +84,8 @@ EOF
 cat ${TEMP_FILE_2} >> ${SCRIPT_NAME}
 echo -e '\nexit 0' >> ${SCRIPT_NAME}
 
+cat ${SCRIPT_NAME}
+
 chmod a+x ${SCRIPT_NAME}
 ./${SCRIPT_NAME}
 

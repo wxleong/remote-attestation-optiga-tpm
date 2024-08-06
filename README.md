@@ -14,14 +14,65 @@ Remote attestation is a mechanism that allows a remote system (server) to verify
 - **[Preparing the Environment](#preparing-the-environment)**
     - **[One-Time Setup](#one-time-setup)**
     - **[Recurring Setup](#recurring-setup)**
+- **[Default Yocto Build](#default-yocto-build)**
 - **[GitHub Actions](#github-actions)**
 - **[License](#license)**
 
 ---
 
-<!--section:all-->
+<!--section:dummy-->
 
 # Prerequisites
+
+The integration guide has been CI tested for compatibility with the following operating system in a Docker container. Please refer to section [GitHub Actions](#github-actions):
+
+- Operating System: Ubuntu (22.04)
+
+---
+
+# Preparing the Environment
+
+## One-Time Setup
+
+Install the dependencies:
+```all
+$ sudo apt-get update
+$ sudo apt-get install -y gawk wget git-core diffstat unzip texinfo gcc-multilib \
+     build-essential chrpath socat libsdl1.2-dev xterm zstd liblz4-tool qemu-system \
+     locales cpio file
+```
+
+Switch to a non-root user if a Docker container environment is used:
+```all
+$ sudo apt-get install sudo
+
+$ useradd -ms /bin/bash user
+$ passwd -d user
+$ adduser user sudo
+$ su user
+```
+
+Fetch the poky repository:
+```all
+$ cd ~
+$ git clone http://git.yoctoproject.org/git/poky ~/poky
+$ cd ~/poky
+$ git checkout yocto-5.0.2
+```
+
+## Recurring Setup
+
+# Default Yocto Build
+
+Set up the build environment:
+```all
+$ source oe-init-build-env
+```
+
+Build the `core-image-full-cmdline` [image](https://docs.yoctoproject.org/ref-manual/images.html#images):
+```all
+$ bitbake -k core-image-full-cmdline
+```
 
 ---
 
@@ -45,5 +96,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <!--section-end-->
 
 <!--tests:
-all;
+dummy;
 -->
