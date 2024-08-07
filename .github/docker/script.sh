@@ -19,7 +19,11 @@ apt update
 
 if [ "$DOCKER_IMAGE" = "ubuntu:22.04" ]; then
     apt install -y gawk
+elif [ "$DOCKER_IMAGE" = "ubuntu:24.04" ]; then
+    apt install -y adduser gawk
 fi
+
+apt install -y locales sudo
 
 ###
 # Parse the README.md
@@ -105,14 +109,11 @@ export LANGUAGE="en_US:en"
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
-apt install locales
 locale-gen en_US.UTF-8
 
 ###
 # Execute as an non-root user
 ###
-
-apt install sudo
 
 useradd -ms /bin/bash user
 passwd -d user
