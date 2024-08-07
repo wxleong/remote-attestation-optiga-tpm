@@ -9,7 +9,7 @@ on:
 jobs:
   test:
     name: 'Testing'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       matrix:
         docker_image: ['ubuntu:22.04']
@@ -21,10 +21,12 @@ jobs:
       - name: 'Set Environment Variables'
         run: |
           docker_image_sanitized=`echo ${{ matrix.docker_image }} | sed "s/:/-/"`
-          unique_string=${{ github.event.repository.name }}_${docker_image_sanitized}
+          script_name=${{ github.event.repository.name }}_${docker_image_sanitized}
+          unique_string=${script_name}_${{ github.run_id }}
           job_workspace_dir=`realpath ${{ github.workspace }}/../${unique_string}`
+          echo "container_name=${unique_string}.sh" >> $GITHUB_ENV
           echo "job_workspace_dir=${job_workspace_dir}" >> $GITHUB_ENV
-          echo "script_name=${unique_string}.sh" >> $GITHUB_ENV
+          echo "script_name=${script_name}.sh" >> $GITHUB_ENV
       - name: 'Test README.md Instructions'
         env:
           PROJECT_NAME: ${{ github.event.repository.name }}
@@ -32,6 +34,7 @@ jobs:
           SCRIPT_NAME: ${{ env.script_name }}
           JOB_WORKSPACE_DIR: ${{ env.job_workspace_dir }}
           DOCKER_REGISTRY: 'https://registry.hub.docker.com/v2'
+          CONTAINER_NAME: ${{ env.container_name }}
         run: |
           .github/docker/launcher.sh
         shell: bash
@@ -42,6 +45,12 @@ jobs:
           name: 'executed-test-scripts'
           path: |
             ${{ env.job_workspace_dir }}/${{ env.script_name }}
+      - name: 'Housekeeping'
+        if: always()
+        run: |
+          rm -rf ${{ env.job_workspace_dir }}
+          docker kill ${{ env.container_name }} || true
+          docker container prune -f
   release:
     name: 'Create Release'
     needs: test
