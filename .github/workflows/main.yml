@@ -12,7 +12,7 @@ jobs:
     runs-on: self-hosted
     strategy:
       matrix:
-        docker_image: ['ubuntu:22.04', 'ubuntu:24.04']
+        docker_image: ['ubuntu:22.04','ubuntu:24.04']
     steps:
       - name: 'Checkout Repository'
         uses: actions/checkout@v3
